@@ -1,0 +1,60 @@
+﻿@page "/crud"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using CarManiac.Client.Components.CarBrandComponents
+@using CarManiac.Client.Components.EngineComponents
+
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+<h2>CRUD testing</h2>
+
+<h3>Brands</h3>
+
+@if (_brands == null)
+{
+    <p><em>Loading brands...</em></p>
+}
+else
+{
+    if (_brands.Count == 0)
+    {
+        <p>No brands in database</p>
+    }
+    @*<CarBrandsTable CarBrands="_brands" OnCarBrandDeleted="@OnInitializedAsync"></CarBrandsTable>*@
+    <CarBrandsTable CarBrands="_brands" OnCarBrandDeleted="OnInitializedAsync"></CarBrandsTable>
+    <button @onmouseenter="@(() => Console.WriteLine("it's working"))" class="btn btn-toolbar btn-outline-info" @onclick="@(() => NavigationManager.NavigateTo($"carbrand/create/{NavigationManager.ToBaseRelativePath(NavigationManager.Uri)}"))">Add new brand</button>
+}
+<h3>Engines</h3>
+@if (_engines == null)
+{
+    <p><em>Loading engines...</em></p>
+}
+else
+{
+    if (_brands.Count == 0)
+    {
+        <p>No engines in database</p>
+    }
+    <EngineTable Engines="_engines"></EngineTable>
+    <button class="btn btn-toolbar btn-outline-info" @onclick="@(() => NavigationManager.NavigateTo($"engine/create/{NavigationManager.ToBaseRelativePath(NavigationManager.Uri)}"))">Add new Engine</button>
+}
+<h3>Car types</h3>
+
+<h3>Cars</h3>
+
+@code {
+    List<CarBrand> _brands;
+    List<EngineData> _engines;
+    List<CarType> _carTypes;
+    List<CarData> _cars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _brands = await Http.GetFromJsonAsync<List<CarBrand>>("api/CarBrands");
+        _engines = await Http.GetFromJsonAsync<List<EngineData>>("api/EngineDatas");
+        Console.WriteLine(_engines.Count + " : engines");
+        //_carTypes = await Http.GetFromJsonAsync<List<CarType>>("api/CarTypes");
+        //_cars = await Http.GetFromJsonAsync<List<CarData>>("api/CarDatas");
+    }
+}

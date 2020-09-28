@@ -1,0 +1,25 @@
+﻿@page "/carbrand/create"
+@page "/carbrand/create/{*RedirectUrl}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using CarManiac.Client.Components.CarBrandComponents
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+<h3>Create new car brand:</h3>
+
+<CarBrandEditForm OnCarBrandChanged="@((carBrand) => HandleValidSubmit((CarBrand)carBrand))"></CarBrandEditForm>
+
+@code {
+    [Parameter] public string RedirectUrl { get; set; }
+
+    protected async Task HandleValidSubmit(CarBrand carBrand)
+    {
+        await Http.PostAsJsonAsync($"api/CarBrands", carBrand);
+
+        if (RedirectUrl != null)
+        {
+            NavigationManager.NavigateTo(RedirectUrl);
+        }
+    }
+}

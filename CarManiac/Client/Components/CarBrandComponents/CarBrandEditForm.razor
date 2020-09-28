@@ -1,0 +1,36 @@
+﻿<EditForm Model="_carBrand" OnValidSubmit="@(()=>OnCarBrandChanged.InvokeAsync(_carBrand))">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        <label>
+            Name:
+            <InputText id="name" @bind-Value="_carBrand.Name" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Country:
+            <InputText id="name" @bind-Value="_carBrand.Name" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Creation year:
+            <InputNumber id="creationYear" @bind-Value="_carBrand.CreationYear" />
+        </label>
+    </p>
+
+    <p><button type="submit">@SubmitButtonText</button></p>
+</EditForm>
+
+@code {
+    private CarBrand _carBrand;
+    [Parameter] public CarBrand CarBrand { get; set; }
+    [Parameter] public EventCallback<CarBrand> OnCarBrandChanged { get; set; }
+    [Parameter] public string SubmitButtonText { get; set; } = "Create";
+
+    protected override void OnInitialized()
+    {
+        _carBrand = CarBrand == null ? new CarBrand() : CarBrand;
+    }
+}

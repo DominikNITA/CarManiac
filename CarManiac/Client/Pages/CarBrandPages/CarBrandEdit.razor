@@ -1,0 +1,39 @@
+﻿@page "/carbrand/edit/{CarBrandId}"
+@page "/carbrand/edit/{CarBrandId}/{*RedirectUrl}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using CarManiac.Client.Components.CarBrandComponents
+@attribute [Authorize]
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Edit car brand:</h3>
+@if (_carBrand == null)
+{
+    <p>Loading data</p>
+}
+else
+{
+    <CarBrandEditForm SubmitButtonText="Edit" CarBrand="_carBrand" OnCarBrandChanged="@((carBrand) => HandleValidSubmit((CarBrand)carBrand))"></CarBrandEditForm>
+}
+
+@code {
+    [Parameter] public string CarBrandId { get; set; }
+    [Parameter] public string RedirectUrl { get; set; }
+    private CarBrand _carBrand;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _carBrand = await Http.GetFromJsonAsync<CarBrand>($"api/CarBrands/{CarBrandId}");
+    }
+
+    protected async Task HandleValidSubmit(CarBrand carBrand)
+    {
+        await Http.PutAsJsonAsync($"api/CarBrands/{CarBrandId}", carBrand);
+
+        if (RedirectUrl != null)
+        {
+            NavigationManager.NavigateTo(RedirectUrl);
+        }
+    }
+}

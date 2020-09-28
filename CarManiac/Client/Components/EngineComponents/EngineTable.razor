@@ -1,0 +1,16 @@
+﻿@using Syncfusion.Blazor.Grids
+
+<SfGrid TValue="EngineData" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })">
+    <Syncfusion.Blazor.Data.SfDataManager Url="api/EngineDatas" Adaptor="Adaptors.WebApiAdaptor"></Syncfusion.Blazor.Data.SfDataManager>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog"></GridEditSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(EngineData.Id) HeaderText="Name" IsPrimaryKey="true" IsIdentity="true" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(EngineData.FullName) HeaderText="Name" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(EngineData.Manufacturer) HeaderText="Manufacturer" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(EngineData.HorsePower) HeaderText="Horse Power" Width="120"></GridColumn>
+    </GridColumns>
+</SfGrid> 
+
+@code {
+    [Parameter] public List<EngineData> Engines { get; set; }
+}
